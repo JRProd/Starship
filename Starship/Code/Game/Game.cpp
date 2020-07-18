@@ -494,11 +494,14 @@ void Game::HandleUserInput()
         }
     }
 
-    if( g_InputSystem->IsKeyPressed( 'N' ) )
+    if( g_InputSystem->WasKeyJustPressed( 'N' ) )
     {
         if( m_IsAttractMode )
         {
             m_IsAttractMode = false;
+        }
+        else
+        {
             RequestShipRespawn();
         }
     }
@@ -930,13 +933,17 @@ void Game::DebugRenderEntities( const Entity* const* entities,
 
 void Game::RequestShipRespawn()
 {
-    if( m_PlayerShipCurrentLife >= MAX_NUMBER_OF_LIVES )
+    if( m_PlayerShip->IsDead() )
     {
-        return;
-    }
-    m_PlayerShipCurrentLife += 1;
+        if( m_PlayerShipCurrentLife >= MAX_NUMBER_OF_LIVES )
+        {
+            return;
+        }
+        m_PlayerShipCurrentLife += 1;
 
-    m_PlayerShip->RespawnShip();
+        m_PlayerShip->RespawnShip();
+    }
+
 }
 
 void Game::RenderLives() const
